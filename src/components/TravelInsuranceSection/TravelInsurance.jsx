@@ -11,6 +11,7 @@ import {
   IconPhone,
   IconMessage,
   IconMail,
+  IconBrandWhatsapp,
 } from "@tabler/icons-react";
 import { CardContainer } from "../ui/CardContainer";
 import { InputGroup } from "../ui/InputGroup";
@@ -45,58 +46,114 @@ const INSURANCE_TYPE = [
   },
 ];
 
+// Use COUNTRIES_DATA for popular countries
 const POPULAR_COUNTRIES = [
   {
     id: "1",
-    name: "Schengen",
-    img: "https://i.pinimg.com/736x/15/a7/54/15a754cee746effb5e512fef2da64100.jpg",
+    name: "Canada",
+    img: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677fb6688fe8cea59e4ef083_malaysia-image.avif",
+    flag: "https://flagcdn.com/w80/ca.png"
   },
   {
     id: "2",
-    name: "Spain",
-    img: "https://i.pinimg.com/736x/37/91/2f/37912f235cc7189c2cd58e4d4503757d.jpg",
+    name: "Germany",
+    img: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677fb70961576beed5d8076f_spain-image.avif",
+    flag: "https://flagcdn.com/w80/de.png"
   },
   {
     id: "3",
-    name: "Egypt",
-    img: "https://i.pinimg.com/736x/59/ab/38/59ab38925f903978dc8fe5acac97446f.jpg",
+    name: "Switzerland",
+    img: "https://i.pinimg.com/1200x/a2/f0/02/a2f00245db27e12856c1aeafa025970f.jpg",
+    flag: "https://flagcdn.com/w80/ch.png"
   },
   {
     id: "4",
-    name: "United Arab Emirates",
-    img: "https://i.pinimg.com/736x/bf/4f/46/bf4f46488641b4b64b642a9cce5d4fd0.jpg",
+    name: "Thailand",
+    img: "https://i.pinimg.com/736x/5a/89/2c/5a892c1bc878ff33140e9b2b75327494.jpg",
+    flag: "https://flagcdn.com/w80/th.png"
   },
   {
     id: "5",
+    name: "Dubai (UAE)",
+    img: "https://i.pinimg.com/736x/f6/94/5d/f6945d66cbc6b08800ad3e638dac99bc.jpg",
+    flag: "https://flagcdn.com/w80/ae.png"
+  },
+  {
+    id: "6",
+    name: "Bulgaria",
+    img: "https://i.pinimg.com/1200x/59/e0/8f/59e08fa98338b66b30080924bfb78a89.jpg",
+    flag: "https://flagcdn.com/w80/bg.png"
+  },
+  {
+    id: "7",
+    name: "Egypt",
+    img: "https://i.pinimg.com/1200x/ec/9b/74/ec9b7448b0383c5589bc8c25bc2bf265.jpg",
+    flag: "https://flagcdn.com/w80/eg.png"
+  },
+  {
+    id: "8",
+    name: "Greece",
+    img: "https://i.pinimg.com/1200x/b3/93/81/b3938122aaad4a58428d6fb1b6b6647d.jpg",
+    flag: "https://flagcdn.com/w80/gr.png"
+  },
+  {
+    id: "9",
+    name: "Hungary",
+    img: "https://i.pinimg.com/1200x/80/2c/95/802c953a0ab48480496cad8bc6edb3d7.jpg",
+    flag: "https://flagcdn.com/w80/hu.png"
+  },
+  {
+    id: "10",
     name: "Netherlands",
-    img: "https://i.pinimg.com/1200x/1b/4e/6d/1b4e6d52fa52100a2a0670e59f632bcb.jpg",
+    img: "https://i.pinimg.com/1200x/c4/3c/34/c43c345e3516ef257031da7e56c3d711.jpg",
+    flag: "https://flagcdn.com/w80/nl.png"
   },
 ];
 
 const CONTACT_OPTIONS = [
   {
+    id: "1",
     icon: <IconPhone size={20} />,
     label: "Call Us",
     value: "+ 0544455526",
     description: "24/7 Customer Support",
     color: "text-green-600",
     bgColor: "bg-green-100",
+    action: "tel:+0544455526",
+    type: "phone"
   },
   {
+    id: "2",
+    icon: <IconBrandWhatsapp size={20} />,
+    label: "WhatsApp",
+    value: "+ 0544455526",
+    description: "Instant messaging",
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+    action: "https://wa.me/0544455526?text=Hello%2C%20I%20need%20help%20with%20travel%20insurance",
+    type: "whatsapp"
+  },
+  {
+    id: "3",
     icon: <IconMessage size={20} />,
     label: "Live Chat",
     value: "Start Chat",
     description: "Instant assistance",
     color: "text-blue-600",
     bgColor: "bg-blue-100",
+    action: "#",
+    type: "chat"
   },
   {
+    id: "4",
     icon: <IconMail size={20} />,
     label: "Email Us",
     value: "sales@visavango.com",
     description: "Response within 2 hours",
     color: "text-purple-600",
     bgColor: "bg-purple-100",
+    action: "mailto:sales@visavango.com",
+    type: "email"
   },
 ];
 
@@ -110,19 +167,39 @@ export const TravelInsurance = () => {
   const [callModal, setCallModal] = useState(false);
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+
+  // Filter countries based on search input
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    
+    if (value.trim()) {
+      const filtered = POPULAR_COUNTRIES.filter(country => 
+        country.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setSearchSuggestions(filtered);
+      setIsSearchExpanded(true);
+    } else {
+      setSearchSuggestions([]);
+      setIsSearchExpanded(false);
+    }
+  };
 
   // Handle country selection from search
-  const handleCountrySelect = (selected) => {
-    setCountry(selected);
+  const handleCountrySelect = (selectedCountry) => {
+    if (!selectedCountries.includes(selectedCountry)) {
+      setSelectedCountries((prev) => [...prev, selectedCountry]);
+    }
+    setCountry(selectedCountry);
+    setSearchValue("");
+    setSearchSuggestions([]);
     setIsSearchExpanded(false);
   };
 
   // Handle popular country selection
   const handlePopularCountrySelect = (countryName) => {
-    if (!selectedCountries.includes(countryName)) {
-      setSelectedCountries((prev) => [...prev, countryName]);
-    }
-    setCountry(countryName);
+    handleCountrySelect(countryName);
   };
 
   // Handle Enter key in search bar
@@ -154,13 +231,11 @@ export const TravelInsurance = () => {
 
   // Hover functions for modal
   const handleMouseEnter = () => {
-    // Clear any existing timeout
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
     }
 
-    // Set timeout to show modal after 300ms
     const timeout = setTimeout(() => {
       setCallModal(true);
     }, 300);
@@ -169,18 +244,37 @@ export const TravelInsurance = () => {
   };
 
   const handleMouseLeave = () => {
-    // Clear the show timeout if mouse leaves quickly
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
     }
 
-    // Set timeout to hide modal after 500ms (gives user time to move to modal)
     const timeout = setTimeout(() => {
       setCallModal(false);
     }, 500);
 
     setHoverTimeout(timeout);
+  };
+
+  // Handle contact option click
+  const handleContactClick = (option) => {
+    switch (option.type) {
+      case "phone":
+        window.location.href = option.action;
+        break;
+      case "whatsapp":
+        window.open(option.action, '_blank');
+        break;
+      case "email":
+        window.location.href = option.action;
+        break;
+      case "chat":
+        console.log("Opening live chat...");
+        break;
+      default:
+        break;
+    }
+    setCallModal(false);
   };
 
   // Handle explore plans - prepare data for navigation
@@ -228,7 +322,6 @@ export const TravelInsurance = () => {
           </Button>
 
           {/* Call Modal */}
-
           {callModal && (
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -252,29 +345,24 @@ export const TravelInsurance = () => {
               </div>
 
               <div className="space-y-3">
-                <List
-                  data={CONTACT_OPTIONS}
-                  uniqueKey="id"
-                  className=" flex flex-col"
-                  render={(item, i) => (
-                    <>
-                      <div key={i} className=" flex  items-center  gap-2">
-                        <div
-                          className={`w-10 h-10 ${item?.bgColor} rounded-full flex items-center justify-center mr-3`}
-                        >
-                          <span className={item?.color}>{item?.icon}</span>
-                        </div>
-                        <div>
-                          <p>{item?.label}</p>
-                          <span className={`font-bold ${item?.color}`}>
-                            {item?.value} 
-                          </span>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                />
-               
+                {CONTACT_OPTIONS.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                    onClick={() => handleContactClick(item)}
+                  >
+                    <div className={`w-10 h-10 ${item.bgColor} rounded-full flex items-center justify-center`}>
+                      <span className={item.color}>{item.icon}</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900">{item.label}</p>
+                      <span className={`font-bold ${item.color} text-sm`}>
+                        {item.value}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="mt-4 pt-4 border-t border-gray-200">
@@ -329,16 +417,42 @@ export const TravelInsurance = () => {
                 Where are you travelling to?
               </h2>
 
-              {/* Search Input */}
-              <InputGroup className="rounded-full">
-                <IconTextBox
-                  prefix={<IconSearch />}
-                  placeholder="Search Country"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={handleKeyPressInSearchBar}
-                />
-              </InputGroup>
+              {/* Search Input with Suggestions */}
+              <div className="relative">
+                <InputGroup className="rounded-full">
+                  <IconTextBox
+                    prefix={<IconSearch />}
+                    placeholder="Search Country (e.g., Canada, Germany, Thailand)"
+                    value={searchValue}
+                    onChange={handleSearchChange}
+                    onKeyPress={handleKeyPressInSearchBar}
+                  />
+                </InputGroup>
+
+                {/* Search Suggestions */}
+                {isSearchExpanded && searchSuggestions.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute top-12 left-0 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg z-40 max-h-60 overflow-y-auto"
+                  >
+                    {searchSuggestions.map((suggestion) => (
+                      <div
+                        key={suggestion.id}
+                        className="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                        onClick={() => handleCountrySelect(suggestion.name)}
+                      >
+                        <img
+                          src={suggestion.flag}
+                          alt={suggestion.name}
+                          className="w-6 h-4 rounded object-cover"
+                        />
+                        <span className="text-gray-700">{suggestion.name}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
 
               {/* Selected Countries Display */}
               {selectedCountries.length > 0 && (
@@ -346,12 +460,12 @@ export const TravelInsurance = () => {
                   {selectedCountries.map((countryName, index) => (
                     <div
                       key={index}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2"
+                      className="bg-yellow-100 text-[#2B1700] px-3 py-1 rounded-full flex items-center gap-2"
                     >
                       <span className="text-sm">{countryName}</span>
                       <button
                         onClick={() => removeSelectedCountry(countryName)}
-                        className="text-blue-600 hover:text-blue-800 text-lg"
+                        className="text-[#2B1700] hover:text-yellow-600 cursor-pointer text-lg"
                       >
                         ×
                       </button>
@@ -377,13 +491,21 @@ export const TravelInsurance = () => {
                       <Button
                         onClick={() => handlePopularCountrySelect(item.name)}
                         variant="secondary"
-                        className="flex flex-col p-0 w-16 h-16 rounded-full overflow-hidden hover:scale-105 transition-transform duration-200"
+                        className="flex flex-col p-0 w-16 h-16 rounded-full overflow-hidden hover:scale-105 transition-transform duration-200 relative"
                       >
                         <img
                           src={item.img}
                           alt={item.name}
                           className="w-16 h-16 rounded-full object-cover"
                         />
+                        {/* Flag overlay */}
+                        {/* <div className="absolute -top-1 -right-1 w-5 h-4 border border-white rounded shadow-sm">
+                          <img
+                            src={item.flag}
+                            alt={`${item.name} flag`}
+                            className="w-full h-full object-cover rounded"
+                          />
+                        </div> */}
                       </Button>
                       <p className="text-xs font-semibold text-center max-w-[80px]">
                         {item.name}

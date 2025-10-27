@@ -111,18 +111,18 @@ export const Footer = () => {
               <div className="mt-6 space-y-2">
                 <h4 className="font-semibold mb-2">Contact us</h4>
                 <a
-                  href="https://wa.me/919876543210?text=Hello%20I%20want%20to%20know%20more%20about%20your%20visa%20services"
+                  href="https://wa.me/9710567529006?text=Hello%20I%20want%20to%20know%20more%20about%20your%20visa%20services"
                   className="flex items-center gap-2 text-lg hover:text-yellow-400 transition"
                 >
                   <IconPhoneCall className=" w-6 h-6 " />
-                  0567529006
+                  +9710567529006
                 </a>
                 <a
-                  href="https://wa.me/971567529006?text=Hello%20I%20want%20to%20know%20more%20about%20your%20visa%20services"
+                  href="https://wa.me/9710544455526?text=Hello%20I%20want%20to%20know%20more%20about%20your%20visa%20services"
                   className="flex items-center gap-2 text-lg hover:text-yellow-400 transition"
                 >
                   <IconPhoneCall className=" w-6 h-6 " />
-                  0544455526
+                  +9710544455526
                 </a>
                 <p className="flex items-center gap-2 text-lg">
                    <IconMail/>

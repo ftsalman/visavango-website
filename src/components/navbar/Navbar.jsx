@@ -9,7 +9,8 @@ const NAV_LINKS = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Services", path: "/visa-services" },
-   ,
+  { label: "Contact", path: "/contact" },
+  ,
 ];
 
 export const Navbar = () => {
@@ -49,7 +50,7 @@ export const Navbar = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Link
-                to={item.path} // ✅ Corrected property
+                to={item.path} 
                 className="text-[#2B1700] hover:text-yellow-500 font-medium transition"
               >
                 {item.label}

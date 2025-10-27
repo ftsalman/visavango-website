@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   IconArrowLeft, 
@@ -10,7 +10,8 @@ import {
   IconWorld,
   IconPlaneTilt,
   IconMedicalCross,
-  IconLuggage
+  IconLuggage,
+  IconBrandWhatsapp
 } from "@tabler/icons-react";
 import Button from "../components/ui/button/Button";
 import { Card } from "../components/ui/Card";
@@ -27,7 +28,9 @@ const INSURANCE_PLANS = [
       "Trip cancellation up to $5,000",
       "Lost baggage up to $1,000",
       "24/7 emergency assistance",
-      "Personal accident coverage"
+      "Personal accident coverage",
+      "Emergency dental treatment",
+      "Travel document loss"
     ],
     popular: false,
     color: "blue",
@@ -47,7 +50,9 @@ const INSURANCE_PLANS = [
       "Trip interruption coverage",
       "Emergency evacuation",
       "24/7 emergency assistance",
-      "Travel delay coverage"
+      "Travel delay coverage",
+      "Missed connection coverage",
+      "Personal liability"
     ],
     popular: true,
     color: "purple",
@@ -69,7 +74,9 @@ const INSURANCE_PLANS = [
       "Rental car coverage",
       "Adventure sports coverage",
       "24/7 premium assistance",
-      "Cancel for any reason"
+      "Cancel for any reason",
+      "Pre-existing conditions coverage",
+      "Business equipment coverage"
     ],
     popular: false,
     color: "yellow",
@@ -107,16 +114,95 @@ const COVERAGE_HIGHLIGHTS = [
 
 export const InsurancePlansPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const travelData = location.state || {};
 
+  // WhatsApp Configuration
+  const WHATSAPP_NUMBER = "9710544455526";
+  const WHATSAPP_MESSAGE = `Hello! I'm interested in the travel insurance plan for my trip.${
+    travelData.countries ? `\n\nTrip Details:\n📍 Destination: ${travelData.countries.join(",")}\n📅 Dates: ${travelData.startDate || "Not set"} to ${travelData.endDate || "Not set"}\n👥 Travellers: ${travelData.travellers || 1}` : ''
+  }\n\nCan you help me proceed with the purchase?`;
+
   const handlePlanSelect = (plan) => {
-    // Here you can handle the plan selection
-    // For example, navigate to payment page or show modal
+    // Prepare data for payment page
+    const insuranceData = {
+      plan: plan,
+      travelData: travelData,
+      totalPrice: calculateTotalPrice(plan, travelData),
+      coverageDetails: getCoverageDetails(plan)
+    };
+
     console.log("Selected plan:", plan);
-    console.log("Travel data:", travelData);
+    console.log("Insurance data:", insuranceData);
     
-    // You can redirect to payment page or show a confirmation modal
-    // navigate('/payment', { state: { plan, travelData } });
+    // Navigate to payment page with all data
+    navigate('/payment', { state: insuranceData });
+    
+    // Alternatively, show confirmation modal
+    // showConfirmationModal(insuranceData);
+  };
+
+  // Calculate total price based on plan and travel details
+  const calculateTotalPrice = (plan, travelData) => {
+    const basePrice = parseInt(plan.price.replace('$', ''));
+    const travellers = travelData.travellers || 1;
+    const duration = calculateTripDuration(travelData.startDate, travelData.endDate);
+    const durationMultiplier = duration > 7 ? 1.2 : 1;
+    
+    return (basePrice * travellers * durationMultiplier).toFixed(2);
+  };
+
+  // Calculate trip duration in days
+  const calculateTripDuration = (startDate, endDate) => {
+    if (!startDate || !endDate) return 7; // Default 7 days
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    return duration > 0 ? duration : 7;
+  };
+
+  // Get coverage details for the selected plan
+  const getCoverageDetails = (plan) => {
+    const coverageMap = {
+      "Basic Plan": {
+        medical: "$100,000",
+        cancellation: "$5,000",
+        baggage: "$1,000",
+        deductible: "$250"
+      },
+      "Standard Plan": {
+        medical: "$250,000",
+        cancellation: "$10,000",
+        baggage: "$2,000",
+        deductible: "$100"
+      },
+      "Premium Plan": {
+        medical: "$500,000",
+        cancellation: "$20,000",
+        baggage: "$3,000",
+        deductible: "$0"
+      }
+    };
+    
+    return coverageMap[plan.name] || coverageMap["Standard Plan"];
+  };
+
+  // Open WhatsApp for support
+  const openWhatsAppSupport = () => {
+    const encodedMessage = encodeURIComponent(WHATSAPP_MESSAGE);
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "Not set";
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -128,15 +214,15 @@ export const InsurancePlansPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8"
         >
-          <Link to="/travel-insurance">
+          {/* <Link to="/travel-insurance">
             <Button
               variant="secondary"
-              className="border-none shadow-none text-indigo-600 hover:bg-indigo-50"
+              className="border-none shadow-none text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
             >
               <IconArrowLeft size={20} />
               Back to Search
             </Button>
-          </Link>
+          </Link> */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center">
             Choose Your Insurance Plan
           </h1>
@@ -149,7 +235,7 @@ export const InsurancePlansPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8"
+            className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8"
           >
             <h2 className="text-xl font-bold mb-4 text-gray-900">Your Trip Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
@@ -165,7 +251,7 @@ export const InsurancePlansPage = () => {
                 <div>
                   <span className="font-semibold">Dates: </span>
                   <span className="text-gray-700">
-                    {travelData.startDate || "Not set"} to {travelData.endDate || "Not set"}
+                    {formatDate(travelData.startDate)} to {formatDate(travelData.endDate)}
                   </span>
                 </div>
               </div>
@@ -204,7 +290,7 @@ export const InsurancePlansPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                className="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300 hover:border-yellow-300"
+                className="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 hover:border-yellow-300"
               >
                 <div className={`w-12 h-12 ${item.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}>
                   {item.icon}
@@ -351,16 +437,17 @@ export const InsurancePlansPage = () => {
           </p>
           <div className="flex justify-center gap-4">
             <Button
+              onClick={openWhatsAppSupport}
               variant="secondary"
-              className="border border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+              className="border border-green-500 text-green-600 hover:bg-green-50 flex items-center gap-2 transition-colors duration-200"
             >
-              <IconClock size={20} />
-              Live Chat
+              <IconBrandWhatsapp size={20} />
+              WhatsApp Support
             </Button>
-            <Link to="/travel-insurance">
+            <Link to="/">
               <Button
                 variant="secondary"
-                className="bg-gray-900 text-white hover:bg-gray-800"
+                className="bg-gray-900 text-white hover:bg-gray-800 flex items-center gap-2 transition-colors duration-200"
               >
                 <IconArrowLeft size={20} />
                 Modify Search
