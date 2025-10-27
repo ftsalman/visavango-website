@@ -52,61 +52,61 @@ const POPULAR_COUNTRIES = [
     id: "1",
     name: "Canada",
     img: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677fb6688fe8cea59e4ef083_malaysia-image.avif",
-    flag: "https://flagcdn.com/w80/ca.png"
+    flag: "https://flagcdn.com/w80/ca.png",
   },
   {
     id: "2",
     name: "Germany",
     img: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677fb70961576beed5d8076f_spain-image.avif",
-    flag: "https://flagcdn.com/w80/de.png"
+    flag: "https://flagcdn.com/w80/de.png",
   },
   {
     id: "3",
     name: "Switzerland",
     img: "https://i.pinimg.com/1200x/a2/f0/02/a2f00245db27e12856c1aeafa025970f.jpg",
-    flag: "https://flagcdn.com/w80/ch.png"
+    flag: "https://flagcdn.com/w80/ch.png",
   },
   {
     id: "4",
     name: "Thailand",
     img: "https://i.pinimg.com/736x/5a/89/2c/5a892c1bc878ff33140e9b2b75327494.jpg",
-    flag: "https://flagcdn.com/w80/th.png"
+    flag: "https://flagcdn.com/w80/th.png",
   },
   {
     id: "5",
     name: "Dubai (UAE)",
     img: "https://i.pinimg.com/736x/f6/94/5d/f6945d66cbc6b08800ad3e638dac99bc.jpg",
-    flag: "https://flagcdn.com/w80/ae.png"
+    flag: "https://flagcdn.com/w80/ae.png",
   },
   {
     id: "6",
     name: "Bulgaria",
     img: "https://i.pinimg.com/1200x/59/e0/8f/59e08fa98338b66b30080924bfb78a89.jpg",
-    flag: "https://flagcdn.com/w80/bg.png"
+    flag: "https://flagcdn.com/w80/bg.png",
   },
   {
     id: "7",
     name: "Egypt",
     img: "https://i.pinimg.com/1200x/ec/9b/74/ec9b7448b0383c5589bc8c25bc2bf265.jpg",
-    flag: "https://flagcdn.com/w80/eg.png"
+    flag: "https://flagcdn.com/w80/eg.png",
   },
   {
     id: "8",
     name: "Greece",
     img: "https://i.pinimg.com/1200x/b3/93/81/b3938122aaad4a58428d6fb1b6b6647d.jpg",
-    flag: "https://flagcdn.com/w80/gr.png"
+    flag: "https://flagcdn.com/w80/gr.png",
   },
   {
     id: "9",
     name: "Hungary",
     img: "https://i.pinimg.com/1200x/80/2c/95/802c953a0ab48480496cad8bc6edb3d7.jpg",
-    flag: "https://flagcdn.com/w80/hu.png"
+    flag: "https://flagcdn.com/w80/hu.png",
   },
   {
     id: "10",
     name: "Netherlands",
     img: "https://i.pinimg.com/1200x/c4/3c/34/c43c345e3516ef257031da7e56c3d711.jpg",
-    flag: "https://flagcdn.com/w80/nl.png"
+    flag: "https://flagcdn.com/w80/nl.png",
   },
 ];
 
@@ -120,7 +120,7 @@ const CONTACT_OPTIONS = [
     color: "text-green-600",
     bgColor: "bg-green-100",
     action: "tel:+0544455526",
-    type: "phone"
+    type: "phone",
   },
   {
     id: "2",
@@ -130,8 +130,9 @@ const CONTACT_OPTIONS = [
     description: "Instant messaging",
     color: "text-green-600",
     bgColor: "bg-green-100",
-    action: "https://wa.me/0544455526?text=Hello%2C%20I%20need%20help%20with%20travel%20insurance",
-    type: "whatsapp"
+    action:
+      "https://wa.me/0544455526?text=Hello%2C%20I%20need%20help%20with%20travel%20insurance",
+    type: "whatsapp",
   },
   {
     id: "3",
@@ -142,7 +143,7 @@ const CONTACT_OPTIONS = [
     color: "text-blue-600",
     bgColor: "bg-blue-100",
     action: "#",
-    type: "chat"
+    type: "chat",
   },
   {
     id: "4",
@@ -153,7 +154,7 @@ const CONTACT_OPTIONS = [
     color: "text-purple-600",
     bgColor: "bg-purple-100",
     action: "mailto:sales@visavango.com",
-    type: "email"
+    type: "email",
   },
 ];
 
@@ -173,9 +174,9 @@ export const TravelInsurance = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-    
+
     if (value.trim()) {
-      const filtered = POPULAR_COUNTRIES.filter(country => 
+      const filtered = POPULAR_COUNTRIES.filter((country) =>
         country.name.toLowerCase().includes(value.toLowerCase())
       );
       setSearchSuggestions(filtered);
@@ -263,7 +264,7 @@ export const TravelInsurance = () => {
         window.location.href = option.action;
         break;
       case "whatsapp":
-        window.open(option.action, '_blank');
+        window.open(option.action, "_blank");
         break;
       case "email":
         window.location.href = option.action;
@@ -346,12 +347,14 @@ export const TravelInsurance = () => {
 
               <div className="space-y-3">
                 {CONTACT_OPTIONS.map((item) => (
-                  <div 
-                    key={item.id} 
+                  <div
+                    key={item.id}
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200"
                     onClick={() => handleContactClick(item)}
                   >
-                    <div className={`w-10 h-10 ${item.bgColor} rounded-full flex items-center justify-center`}>
+                    <div
+                      className={`w-10 h-10 ${item.bgColor} rounded-full flex items-center justify-center`}
+                    >
                       <span className={item.color}>{item.icon}</span>
                     </div>
                     <div className="flex-1">
@@ -359,7 +362,9 @@ export const TravelInsurance = () => {
                       <span className={`font-bold ${item.color} text-sm`}>
                         {item.value}
                       </span>
-                      <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -474,45 +479,41 @@ export const TravelInsurance = () => {
                 </div>
               )}
 
-              <p className="text-xl text-[#2B1700] font-bold">
+              <p className="text-xl text-[#2B1700] font-bold ">
                 Popular choices{" "}
                 <span className="text-xs text-gray-500 font-normal">
                   (you can add more than one country)
                 </span>
               </p>
 
-              <div>
-                <List
-                  data={POPULAR_COUNTRIES}
-                  uniqueKey="id"
-                  className="flex items-center flex-wrap gap-4"
-                  render={(item) => (
-                    <div className="flex flex-col items-center gap-2">
-                      <Button
-                        onClick={() => handlePopularCountrySelect(item.name)}
-                        variant="secondary"
-                        className="flex flex-col p-0 w-16 h-16 rounded-full overflow-hidden hover:scale-105 transition-transform duration-200 relative"
-                      >
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          className="w-16 h-16 rounded-full object-cover"
-                        />
-                        {/* Flag overlay */}
-                        {/* <div className="absolute -top-1 -right-1 w-5 h-4 border border-white rounded shadow-sm">
+              {/* 🌍 Horizontal Scroll Carousel */}
+              <div className="overflow-x-auto  p-1 scrollbar-hide">
+                <div className="flex gap-6 snap-x snap-mandatory px-1 pb-2">
+                  {POPULAR_COUNTRIES.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      className="flex-shrink-0 snap-center"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <Button
+                          onClick={() => handlePopularCountrySelect(item.name)}
+                          variant="secondary"
+                          className="flex flex-col p-0 w-15 h-15 rounded-full overflow-hidden transition-transform duration-200 relative"
+                        >
                           <img
-                            src={item.flag}
-                            alt={`${item.name} flag`}
-                            className="w-full h-full object-cover rounded"
+                            src={item.img}
+                            alt={item.name}
+                            className="w-20 h-20 rounded-full object-cover"
                           />
-                        </div> */}
-                      </Button>
-                      <p className="text-xs font-semibold text-center max-w-[80px]">
-                        {item.name}
-                      </p>
-                    </div>
-                  )}
-                />
+                        </Button>
+                        <p className="text-xs font-semibold text-center max-w-[80px]">
+                          {item.name}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </div>
           </CardContainer>
