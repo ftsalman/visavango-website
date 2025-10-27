@@ -6,7 +6,7 @@ import { ImageBox } from "./ImageBox";
 import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-b from-[#FFE6B3]/40 via-white to-white overflow-hidden">
@@ -46,7 +46,7 @@ export const Hero = () => {
           </Button>
 
           <Button
-          onClick={() => navigate("/contact")}
+            onClick={() => navigate("/contact")}
             variant="secondary"
             className="flex items-center gap-2 px-8 py-3 rounded-full border border-gray-300 hover:bg-gray-100 transition-all duration-300"
           >

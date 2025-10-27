@@ -10,6 +10,7 @@ import { CountryDetailsPage } from "../pages/CountryDetailsPage";
 import { VisaDetailsPage } from "../pages/VisaDetailsPage";
 import { ImmigrationDetailsPage, } from "../pages/ImmigrationDetailsPage";
 import { ImmigrationsPage } from "../pages/ImmigrationsPage";
+import { InsurancePlansPage } from "../pages/InsurancePlancePage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
         element:<ImmigrationDetailsPage/>
 
       },
+      {
+        path:"/insurance-plan",
+        element:<InsurancePlansPage/>
+      }
     ],
   },
 ]);

@@ -7,7 +7,8 @@ import { GlobalReach } from "../components/GlobalReach/GlobalReach";
 import { CaseStudies } from "../components/CaseStudies/CaseStudies";
 import { VisaServices } from "../components/VisaServices/VisaServices";
 import { Frequently } from "../components/frequently-section/Frequently";
-import { Blog } from "../components/blog/Blog";
+import { TravelInsurance } from "../components/TravelInsuranceSection/TravelInsurance";
+import { Blog } from "../components/blog-section/Blog";
 
 export const HomePage = () => {
   return (
@@ -26,9 +27,12 @@ export const HomePage = () => {
       <div id="immigrations">
         <Immigrations />
       </div>
-
+ 
       {/* Journey Steps */}
       <JourneySteps />
+
+      {/* travel   Insurance  */}
+      <TravelInsurance/>
 
       {/* Case Studies */}
       <CaseStudies />
