@@ -1,17 +1,17 @@
 import React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  IconArrowLeft, 
-  IconCheck, 
-  IconStar, 
+import {
+  IconArrowLeft,
+  IconCheck,
+  IconStar,
   IconShield,
   IconClock,
   IconWorld,
   IconPlaneTilt,
   IconMedicalCross,
   IconLuggage,
-  IconBrandWhatsapp
+  IconBrandWhatsapp,
 } from "@tabler/icons-react";
 import Button from "../components/ui/button/Button";
 import { Card } from "../components/ui/Card";
@@ -30,12 +30,12 @@ const INSURANCE_PLANS = [
       "24/7 emergency assistance",
       "Personal accident coverage",
       "Emergency dental treatment",
-      "Travel document loss"
+      "Travel document loss",
     ],
     popular: false,
     color: "blue",
     icon: <IconShield size={24} className="text-blue-600" />,
-    bestFor: "Short trips, budget travelers"
+    bestFor: "Short trips, budget travelers",
   },
   {
     id: "2",
@@ -52,12 +52,12 @@ const INSURANCE_PLANS = [
       "24/7 emergency assistance",
       "Travel delay coverage",
       "Missed connection coverage",
-      "Personal liability"
+      "Personal liability",
     ],
     popular: true,
     color: "purple",
     icon: <IconStar size={24} className="text-purple-600" />,
-    bestFor: "Family vacations, business trips"
+    bestFor: "Family vacations, business trips",
   },
   {
     id: "3",
@@ -76,13 +76,13 @@ const INSURANCE_PLANS = [
       "24/7 premium assistance",
       "Cancel for any reason",
       "Pre-existing conditions coverage",
-      "Business equipment coverage"
+      "Business equipment coverage",
     ],
     popular: false,
     color: "yellow",
     icon: <IconWorld size={24} className="text-yellow-600" />,
-    bestFor: "Luxury travel, long trips"
-  }
+    bestFor: "Luxury travel, long trips",
+  },
 ];
 
 const COVERAGE_HIGHLIGHTS = [
@@ -90,38 +90,55 @@ const COVERAGE_HIGHLIGHTS = [
     icon: <IconMedicalCross size={24} className="text-yellow-600" />,
     title: "Medical Coverage",
     description: "Emergency medical expenses and hospitalization",
-    bgColor: "bg-yellow-100"
+    bgColor: "bg-yellow-100",
   },
   {
     icon: <IconPlaneTilt size={24} className="text-yellow-600" />,
     title: "Trip Protection",
     description: "Cancellation, interruption, and delay coverage",
-    bgColor: "bg-yellow-100"
+    bgColor: "bg-yellow-100",
   },
   {
     icon: <IconLuggage size={24} className="text-yellow-600" />,
     title: "Baggage Protection",
     description: "Lost, stolen, or delayed baggage coverage",
-    bgColor: "bg-yellow-100"
+    bgColor: "bg-yellow-100",
   },
   {
     icon: <IconClock size={24} className="text-yellow-600" />,
     title: "24/7 Support",
     description: "Round-the-clock emergency assistance",
-    bgColor: "bg-yellow-100"
-  }
+    bgColor: "bg-yellow-100",
+  },
 ];
 
 export const InsurancePlansPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const travelData = location.state || {};
+  const WHATSAPP_NUMBER = "971544455526";
 
-  // WhatsApp Configuration
-  const WHATSAPP_NUMBER = "9710544455526";
   const WHATSAPP_MESSAGE = `Hello! I'm interested in the travel insurance plan for my trip.${
-    travelData.countries ? `\n\nTrip Details:\n📍 Destination: ${travelData.countries.join(",")}\n📅 Dates: ${travelData.startDate || "Not set"} to ${travelData.endDate || "Not set"}\n👥 Travellers: ${travelData.travellers || 1}` : ''
+    travelData.countries
+      ? `\n\nTrip Details:\n📍 Destination: ${travelData.countries.join(
+          ","
+        )}\n📅 Dates: ${travelData.startDate || "Not set"} to ${
+          travelData.endDate || "Not set"
+        }\n👥 Travellers: ${travelData.travellers || 1}`
+      : ""
   }\n\nCan you help me proceed with the purchase?`;
+
+  const openWhatsAppSupport = () => {
+    const encodedMessage = encodeURIComponent(WHATSAPP_MESSAGE);
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    const whatsappUrl = isMobile
+      ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
+      : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+  };
 
   const handlePlanSelect = (plan) => {
     // Prepare data for payment page
@@ -129,33 +146,36 @@ export const InsurancePlansPage = () => {
       plan: plan,
       travelData: travelData,
       totalPrice: calculateTotalPrice(plan, travelData),
-      coverageDetails: getCoverageDetails(plan)
+      coverageDetails: getCoverageDetails(plan),
     };
 
     console.log("Selected plan:", plan);
     console.log("Insurance data:", insuranceData);
-    
+
     // Navigate to payment page with all data
-    navigate('/payment', { state: insuranceData });
-    
+    navigate("/payment", { state: insuranceData });
+
     // Alternatively, show confirmation modal
     // showConfirmationModal(insuranceData);
   };
 
   // Calculate total price based on plan and travel details
   const calculateTotalPrice = (plan, travelData) => {
-    const basePrice = parseInt(plan.price.replace('$', ''));
+    const basePrice = parseInt(plan.price.replace("$", ""));
     const travellers = travelData.travellers || 1;
-    const duration = calculateTripDuration(travelData.startDate, travelData.endDate);
+    const duration = calculateTripDuration(
+      travelData.startDate,
+      travelData.endDate
+    );
     const durationMultiplier = duration > 7 ? 1.2 : 1;
-    
+
     return (basePrice * travellers * durationMultiplier).toFixed(2);
   };
 
   // Calculate trip duration in days
   const calculateTripDuration = (startDate, endDate) => {
     if (!startDate || !endDate) return 7; // Default 7 days
-    
+
     const start = new Date(startDate);
     const end = new Date(endDate);
     const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
@@ -169,39 +189,32 @@ export const InsurancePlansPage = () => {
         medical: "$100,000",
         cancellation: "$5,000",
         baggage: "$1,000",
-        deductible: "$250"
+        deductible: "$250",
       },
       "Standard Plan": {
         medical: "$250,000",
         cancellation: "$10,000",
         baggage: "$2,000",
-        deductible: "$100"
+        deductible: "$100",
       },
       "Premium Plan": {
         medical: "$500,000",
         cancellation: "$20,000",
         baggage: "$3,000",
-        deductible: "$0"
-      }
+        deductible: "$0",
+      },
     };
-    
-    return coverageMap[plan.name] || coverageMap["Standard Plan"];
-  };
 
-  // Open WhatsApp for support
-  const openWhatsAppSupport = () => {
-    const encodedMessage = encodeURIComponent(WHATSAPP_MESSAGE);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+    return coverageMap[plan.name] || coverageMap["Standard Plan"];
   };
 
   // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "Not set";
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -237,36 +250,45 @@ export const InsurancePlansPage = () => {
             transition={{ delay: 0.1 }}
             className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8"
           >
-            <h2 className="text-xl font-bold mb-4 text-gray-900">Your Trip Details</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">
+              Your Trip Details
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <IconWorld size={20} className="text-yellow-600" />
-                <div>
+                <div className=" flex  items-center gap-3">
                   <span className="font-semibold">Destination: </span>
-                  <span className="text-gray-700">{travelData.countries.join(", ")}</span>
+                  <span className="text-gray-700 text-sm font-extrabold">
+                    {travelData.countries.join(", ")}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <IconClock size={20} className="text-yellow-600" />
-                <div>
+                <div className="flex  items-center gap-3">
                   <span className="font-semibold">Dates: </span>
-                  <span className="text-gray-700">
-                    {formatDate(travelData.startDate)} to {formatDate(travelData.endDate)}
+                  <span className="text-gray-700  text-sm font-extrabold">
+                    {formatDate(travelData.startDate)} to{" "}
+                    {formatDate(travelData.endDate)}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <IconPlaneTilt size={20} className="text-yellow-600" />
-                <div>
+                <div className="flex  items-center gap-3">
                   <span className="font-semibold">Travellers: </span>
-                  <span className="text-gray-700">{travelData.travellers || 1}</span>
+                  <span className="text-gray-700 text-sm font-extrabold">
+                    {travelData.travellers || 1}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <IconShield size={20} className="text-yellow-600" />
-                <div>
+                <div className="flex  items-center gap-3">
                   <span className="font-semibold">Status: </span>
-                  <span className="text-green-600 font-medium">Ready to insure</span>
+                  <span className="text-green-600 text-sm font-extrabold ">
+                    Ready to insure
+                  </span>
                 </div>
               </div>
             </div>
@@ -292,10 +314,14 @@ export const InsurancePlansPage = () => {
                 transition={{ delay: 0.3 + index * 0.1 }}
                 className="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 hover:border-yellow-300"
               >
-                <div className={`w-12 h-12 ${item.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                <div
+                  className={`w-12 h-12 ${item.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
+                >
                   {item.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  {item.title}
+                </h3>
                 <p className="text-sm text-gray-600">{item.description}</p>
               </motion.div>
             ))}
@@ -315,7 +341,7 @@ export const InsurancePlansPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 + index * 0.1 }}
-              className={`relative ${plan.popular ? 'scale-105 z-10' : ''}`}
+              className={`relative ${plan.popular ? "scale-105 z-10" : ""}`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
@@ -325,31 +351,54 @@ export const InsurancePlansPage = () => {
                   </div>
                 </div>
               )}
-              
-              <Card className={`h-full border-2 transition-all duration-300 ${
-                plan.popular 
-                  ? 'border-yellow-400 shadow-xl bg-white' 
-                  : 'border-gray-200 hover:border-yellow-300 hover:shadow-lg bg-white'
-              }`}>
+
+              <Card
+                className={`h-full border-2 transition-all duration-300 ${
+                  plan.popular
+                    ? "border-yellow-400 shadow-xl bg-white"
+                    : "border-gray-200 hover:border-yellow-300 hover:shadow-lg bg-white"
+                }`}
+              >
                 <div className="p-6 h-full flex flex-col">
                   {/* Plan Header */}
                   <div className="text-center mb-6">
-                    <div className={`w-16 h-16 ${
-                      plan.popular ? 'bg-yellow-100' : 'bg-gray-100'
-                    } rounded-full flex items-center justify-center mx-auto mb-4`}>
+                    <div
+                      className={`w-16 h-16 ${
+                        plan.popular ? "bg-yellow-100" : "bg-gray-100"
+                      } rounded-full flex items-center justify-center mx-auto mb-4`}
+                    >
                       {plan.icon}
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      {plan.name}
+                    </h3>
                     <div className="flex items-baseline justify-center gap-1 mb-2">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-600 text-sm">{plan.period}</span>
+                      <span className="text-4xl font-bold text-gray-900">
+                        {plan.price}
+                      </span>
+                      <span className="text-gray-600 text-sm">
+                        {plan.period}
+                      </span>
                     </div>
-                    <p className="text-gray-600 text-sm mb-3">{plan.coverage}</p>
-                    <div className={`${
-                      plan.popular ? 'bg-yellow-50 border border-yellow-200' : 'bg-gray-100'
-                    } rounded-lg px-3 py-2`}>
+                    <p className="text-gray-600 text-sm mb-3">
+                      {plan.coverage}
+                    </p>
+                    <div
+                      className={`${
+                        plan.popular
+                          ? "bg-yellow-50 border border-yellow-200"
+                          : "bg-gray-100"
+                      } rounded-lg px-3 py-2`}
+                    >
                       <p className="text-xs font-medium text-gray-700">
-                        Best for: <span className={plan.popular ? 'text-yellow-600' : 'text-indigo-600'}>{plan.bestFor}</span>
+                        Best for:{" "}
+                        <span
+                          className={
+                            plan.popular ? "text-yellow-600" : "text-indigo-600"
+                          }
+                        >
+                          {plan.bestFor}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -358,9 +407,17 @@ export const InsurancePlansPage = () => {
                   <div className="flex-1 mb-6">
                     <ul className="space-y-3">
                       {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-start gap-3">
-                          <IconCheck size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm leading-relaxed">{feature}</span>
+                        <li
+                          key={featureIndex}
+                          className="flex items-start gap-3"
+                        >
+                          <IconCheck
+                            size={20}
+                            className="text-green-500 mt-0.5 flex-shrink-0"
+                          />
+                          <span className="text-gray-700 text-sm leading-relaxed">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -370,9 +427,9 @@ export const InsurancePlansPage = () => {
                   <Button
                     onClick={() => handlePlanSelect(plan)}
                     className={`w-full py-4 font-semibold rounded-xl transition-all duration-200 ${
-                      plan.popular 
-                        ? 'bg-yellow-500 hover:bg-yellow-600 text-white shadow-lg hover:shadow-xl' 
-                        : 'bg-[#2B1700] hover:bg-[#3a2400] text-white hover:shadow-lg'
+                      plan.popular
+                        ? "bg-yellow-500 hover:bg-yellow-600 text-white shadow-lg hover:shadow-xl"
+                        : "bg-[#2B1700] hover:bg-[#3a2400] text-white hover:shadow-lg"
                     }`}
                   >
                     Select {plan.name}
@@ -395,8 +452,9 @@ export const InsurancePlansPage = () => {
               Why Choose Our Travel Insurance?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              We provide comprehensive coverage with 24/7 support, easy claims process, 
-              and competitive pricing. Your peace of mind is our priority.
+              We provide comprehensive coverage with 24/7 support, easy claims
+              process, and competitive pricing. Your peace of mind is our
+              priority.
             </p>
           </div>
 
@@ -405,22 +463,34 @@ export const InsurancePlansPage = () => {
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <IconCheck className="text-yellow-600" size={24} />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Instant Coverage</h3>
-              <p className="text-sm text-gray-600">Get covered immediately after purchase</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Instant Coverage
+              </h3>
+              <p className="text-sm text-gray-600">
+                Get covered immediately after purchase
+              </p>
             </div>
             <div className="p-4">
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <IconShield className="text-yellow-600" size={24} />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Secure Payment</h3>
-              <p className="text-sm text-gray-600">Your information is protected with encryption</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Secure Payment
+              </h3>
+              <p className="text-sm text-gray-600">
+                Your information is protected with encryption
+              </p>
             </div>
             <div className="p-4">
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <IconClock className="text-yellow-600" size={24} />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Money Back Guarantee</h3>
-              <p className="text-sm text-gray-600">30-day money back guarantee on all plans</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Money Back Guarantee
+              </h3>
+              <p className="text-sm text-gray-600">
+                30-day money back guarantee on all plans
+              </p>
             </div>
           </div>
         </motion.div>
